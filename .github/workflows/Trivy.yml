@@ -61,13 +61,22 @@ jobs:
         run: which trivy || echo "Trivy is not installed"
              trivy --version || echo "Trivy version not found"
           
-      - name: Retry DB download if rate-limited
+      - name: Retry DB download with exponential backoff
         run: |
-          for i in {1..5}; do
-            echo "Attempt #$i"
-            trivy image --download-db-only ghcr.io/aquasecurity/trivy-db:2 && break || { echo "Failed attempt #$i"; sleep 30; }
-          done
-        continue-on-error: true
+              MAX_RETRIES=5
+              RETRY_DELAY=5
+              for ((i=1; i<=MAX_RETRIES; i++)); do
+              echo "Attempt #$i"
+              if trivy image --download-db-only ghcr.io/aquasecurity/trivy-db:2; then
+              echo "DB download successful"
+              break
+              else
+              echo "Attempt #$i failed, retrying in $RETRY_DELAY seconds"
+              sleep $RETRY_DELAY
+              RETRY_DELAY=$((RETRY_DELAY * 2))  # Double the delay for the next retry
+              fi
+              done
+              continue-on-error: true
          
       - name: Scan Docker image with Trivy
         uses: aquasecurity/trivy-action@master
