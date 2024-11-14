@@ -35,7 +35,7 @@ jobs:
         run: cd Demo  # Ensure we are in the correct directory
 
       - name: Build the JAR file
-        run:  gradlew build 
+        run:  ./gradlew build 
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v3
