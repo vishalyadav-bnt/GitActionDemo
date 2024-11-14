@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.3.5'
 	id 'io.spring.dependency-management' version '1.1.6'
+	id 'com.bmuschko.docker-java-application' version '7.2.0'
 }
 
 group = 'com.example'
@@ -27,12 +28,20 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
-task buildDocker(type: Docker) {
+docker {
+    javaApplication {
+        baseImage = 'openjdk:17-jre-slim' 
+        ports = [8080] 
+        mainClass = 'com.example.Demo' 
+        jvmArgs = ['-Djava.security.egd=file:/dev/./urandom']
+    }
+}
+
+task buildDocker(type: com.bmuschko.gradle.docker.tasks.image.DockerBuildImage) {
     group = 'build'
     description = 'Build Docker image for Spring Boot app'
     dependsOn 'build'
 
-    dockerFile = file('Dockerfile')
-    contextDir = file('.')
-    imageName = "ghcr.io/vishalyadav-bnt/Demo:latest"
+    inputDir = file('.')
+    tags = ['ghcr.io/vishalyadav-bnt/Demo:latest']
 }
