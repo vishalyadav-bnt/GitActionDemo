@@ -48,6 +48,11 @@ jobs:
           repository: ${{ github.repository_owner }}/demo
           tag_with_ref: true
 
+      - name: Download Trivy DB (first run)
+        run: |
+         trivy image --download-db-only ghcr.io/aquasecurity/trivy-db:2
+         continue-on-error: true
+         
       - name: Scan Docker image with Trivy
         uses: aquasecurity/trivy-action@master
         with:
