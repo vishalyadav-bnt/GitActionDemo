@@ -32,10 +32,11 @@ jobs:
         uses: gradle/wrapper-validation-action@v1
 
       - name: Change to Demo directory
-        run: cd Demo  # Ensure we are in the correct directory
+        run: cd Demo && ls -l  # Verify gradlew is present
 
+      # Build the project using Gradle Wrapper
       - name: Build the JAR file
-        run:  ./gradlew build 
+        run: cd Demo && ./gradlew build
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v3
