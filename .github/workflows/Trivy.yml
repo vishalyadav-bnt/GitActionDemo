@@ -85,6 +85,9 @@ jobs:
               fi
               done
         continue-on-error: true
+
+      - name: Pull Docker image locally
+        run: docker pull ghcr.io/${{ github.repository_owner }}/demo:latest
          
       - name: Scan Docker image with Trivy
         run: trivy image --format sarif --output trivy-report.sarif ghcr.io/${{ github.repository_owner }}/demo:latest
