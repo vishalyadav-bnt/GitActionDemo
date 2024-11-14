@@ -61,10 +61,13 @@ jobs:
         run: which trivy || echo "Trivy is not installed"
              trivy --version || echo "Trivy version not found"
           
-      - name: Download Trivy DB (first run)
+      - name: Retry DB download if rate-limited
         run: |
-         trivy image --download-db-only ghcr.io/aquasecurity/trivy-db:2
-         continue-on-error: true
+          for i in {1..5}; do
+            echo "Attempt #$i"
+            trivy image --download-db-only ghcr.io/aquasecurity/trivy-db:2 && break || { echo "Failed attempt #$i"; sleep 30; }
+          done
+        continue-on-error: true
          
       - name: Scan Docker image with Trivy
         uses: aquasecurity/trivy-action@master
