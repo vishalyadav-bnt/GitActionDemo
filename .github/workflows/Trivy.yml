@@ -29,11 +29,14 @@ jobs:
         uses: gradle/wrapper-validation-action@v1
 
       - name: Build and push Docker image
-        run: |
-          cd Demo
-          docker build -t ghcr.io/${{ secrets.GITHUB_REPOSITORY_OWNER }}/demo:latest .
-          docker push ghcr.io/${{ secrets.GITHUB_REPOSITORY_OWNER }}/demo:latest
-          
+        uses: docker/build-push-action@v3
+        with:
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: ghcr.io
+          repository: ${{ github.repository_owner }}/demo
+          tag_with_ref: true
+
       - name: Scan Docker image with Trivy
         uses: aquasecurity/trivy-action@master
         with:
