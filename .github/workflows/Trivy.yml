@@ -48,17 +48,17 @@ jobs:
       - name: Build Docker image
         run: |
           cd Demo
-          docker build -t ghcr.io/${{ github.repository_owner }}/Demo:latest .
+          docker build -t ghcr.io/${{ github.repository_owner }}/demo:latest .
 
       # Step 6: Push the image to GHCR
       - name: Push Docker image to GHCR
-        run: docker push ghcr.io/${{ github.repository_owner }}/Demo:latest
+        run: docker push ghcr.io/${{ github.repository_owner }}/demo:latest
 
       # Step 7: Scan Docker image with Aqua Trivy
       - name: Scan Docker image with Trivy
         uses: aquasecurity/trivy-action@master 
         with:
-          image: ghcr.io/${{ github.repository_owner }}/Demo:latest
+          image: ghcr.io/${{ github.repository_owner }}/demo:latest
           format: 'sarif'
           output: 'trivy-report.sarif'
           severity: 'HIGH,CRITICAL'
