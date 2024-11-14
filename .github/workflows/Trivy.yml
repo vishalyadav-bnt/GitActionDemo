@@ -86,6 +86,11 @@ jobs:
               done
         continue-on-error: true
 
+      - name: Log in to GitHub Container Registry
+        env:
+          CR_PAT: ${{ secrets.GHCR_PAT }}
+        run: echo "$CR_PAT" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
       - name: Pull Docker image locally
         run: docker pull ghcr.io/${{ github.repository_owner }}/demo:latest
          
