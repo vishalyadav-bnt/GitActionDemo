@@ -76,7 +76,7 @@ jobs:
               RETRY_DELAY=$((RETRY_DELAY * 2))  # Double the delay for the next retry
               fi
               done
-              continue-on-error: true
+        continue-on-error: true
          
       - name: Scan Docker image with Trivy
         uses: aquasecurity/trivy-action@master
