@@ -48,12 +48,17 @@ jobs:
           repository: ${{ github.repository_owner }}/demo
           tag_with_ref: true
 
+       # Install Trivy
       - name: Install Trivy
         run: |
           sudo apt-get update
           sudo apt-get install -y wget
           wget https://github.com/aquasecurity/trivy/releases/download/v0.29.2/trivy_0.29.2_Linux-64bit.deb
           sudo dpkg -i trivy_0.29.2_Linux-64bit.deb
+
+      # Check if Trivy is installed
+      - name: Check if Trivy is installed
+        run: which trivy || echo "Trivy is not installed"
           
       - name: Download Trivy DB (first run)
         run: |
