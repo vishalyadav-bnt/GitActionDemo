@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.3.5'
 	id 'io.spring.dependency-management' version '1.1.6'
+	id "com.google.cloud.tools.jib" version "3.3.1"
 }
 
 group = 'com.example'
@@ -25,4 +26,10 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+jib {
+    to {
+        image = "ghcr.io/${{ github.repository_owner }}/demo"
+        tags = ["latest"]
+    }
 }
