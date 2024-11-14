@@ -64,7 +64,7 @@ jobs:
       - name: Retry DB download with exponential backoff
         run: |
               MAX_RETRIES=5
-              RETRY_DELAY=5
+              RETRY_DELAY=10
               for ((i=1; i<=MAX_RETRIES; i++)); do
               echo "Attempt #$i"
               if trivy image --download-db-only ghcr.io/aquasecurity/trivy-db:2; then
