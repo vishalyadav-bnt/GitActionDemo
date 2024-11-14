@@ -1,0 +1,57 @@
+name: CI/CD with Aqua Trivy Scan
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build_and_scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Gradle
+      - name: Set up Gradle
+        uses: gradle/wrapper-validation-action@v1
+
+      # Step 3: Build Docker image using Gradle
+      - name: Build Docker image
+        run: ./gradlew buildDocker
+
+      # Step 4: Log in to GitHub Container Registry (GHCR)
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Step 5: Build Docker image (needed to push it)
+      - name: Build Docker image
+        run: docker build -t ghcr.io/${{ github.repository_owner }}/Demo:latest .
+
+      # Step 6: Push the image to GHCR
+      - name: Push Docker image to GHCR
+        run: docker push ghcr.io/${{ github.repository_owner }}/Demo:latest
+
+      # Step 7: Scan Docker image with Aqua Trivy
+      - name: Scan Docker image with Trivy
+        uses: aquasecurity/trivy-action@v0.3.0
+        with:
+          image: ghcr.io/${{ github.repository_owner }}/Demo:latest
+          format: 'sarif'
+          output: 'trivy-report.sarif'
+          severity: 'HIGH,CRITICAL'
+
+      # Step 8: Upload Trivy scan results (SARIF) to GitHub Actions
+      - name: Upload SARIF report
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: trivy-report.sarif
