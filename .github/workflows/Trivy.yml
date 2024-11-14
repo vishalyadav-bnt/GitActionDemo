@@ -26,7 +26,9 @@ jobs:
 
       # Step 3: Build Docker image using Gradle
       - name: Build Docker image
-        run: ./Demo/gradlew buildDocker
+        run: |
+          cd Demo
+          ./gradlew buildDocker
 
       # Step 4: Log in to GitHub Container Registry (GHCR)
       - name: Log in to GitHub Container Registry
@@ -38,7 +40,9 @@ jobs:
 
       # Step 5: Build Docker image (needed to push it)
       - name: Build Docker image
-        run: docker build -t ghcr.io/${{ github.repository_owner }}/Demo:latest .
+        run: |
+          cd Demo
+          docker build -t ghcr.io/${{ github.repository_owner }}/Demo:latest .
 
       # Step 6: Push the image to GHCR
       - name: Push Docker image to GHCR
