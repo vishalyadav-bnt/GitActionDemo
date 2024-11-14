@@ -59,6 +59,7 @@ jobs:
       # Check if Trivy is installed
       - name: Check if Trivy is installed
         run: which trivy || echo "Trivy is not installed"
+             trivy --version || echo "Trivy version not found"
           
       - name: Download Trivy DB (first run)
         run: |
