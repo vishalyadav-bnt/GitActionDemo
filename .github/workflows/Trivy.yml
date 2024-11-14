@@ -31,10 +31,10 @@ jobs:
         uses: gradle/wrapper-validation-action@v1
 
       # Step 3: Build Docker image using Gradle
-      - name: Build Docker image
-        run: |
-          cd Demo
-          ./gradlew buildDocker
+      # - name: Build Docker image
+      #   run: |
+      #     cd Demo
+      #     ./gradlew buildDocker
 
       # Step 4: Log in to GitHub Container Registry (GHCR)
       - name: Log in to GitHub Container Registry
