@@ -45,7 +45,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: ghcr.io
-          repository: ${{ github.repository_owner }}/demo
+          repository: ${{ github.repository_owner }}/demo:latest
           tag_with_ref: true
 
        # Install Trivy
