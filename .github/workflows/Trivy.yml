@@ -94,16 +94,6 @@ jobs:
           sarif_file: trivy-results.sarif
           category: Trivy Scan
 
-      # Generate HTML report as well
-      - name: Generate HTML Report
-        if: always()
-        run: |
-          trivy image \
-            --format template \
-            --template "@contrib/html.tpl" \
-            --output trivy-report.html \
-            ghcr.io/${{ github.repository_owner }}/gitactiondemo:latest
-
       # Upload HTML report as artifact
       - name: Upload HTML Report
         if: always()
