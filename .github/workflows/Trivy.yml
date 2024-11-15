@@ -41,12 +41,11 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v3
         with:
-          context: ./Demo
+          context: ./Demo          # Directory where your Dockerfile is
+          push: true               # This tells GitHub Actions to push the image
+          tags: ghcr.io/${{ github.repository_owner }}/demo:latest
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-          registry: ghcr.io
-          repository: ${{ github.repository_owner }}/demo:latest
-          tag_with_ref: true
+          password: ${{ secrets.GHCR_PAT }}
           
        # Install Trivy
       - name: Install Trivy
