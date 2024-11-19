@@ -114,7 +114,7 @@ jobs:
           retention-days: 30
 
         env:
-        GH_TOKEN: ${{ secrets.GHCR_PAT }}
+          GH_TOKEN: ${{ secrets.GHCR_PAT }}
 
       - name: Create Release with SARIF Report
         run: |
