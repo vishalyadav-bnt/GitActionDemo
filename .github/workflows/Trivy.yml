@@ -120,4 +120,6 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           zip trivy-results.zip trivy-results.sarif
-          gh release create "trivy-report-${{ github.sha }}" trivy-results.zip --notes "Trivy SARIF Report"
+          gh release create "trivy-report-${{ github.sha }}" trivy-results.zip \
+            --repo "${{ github.repository }}" \
+            --notes "Trivy SARIF Report"
