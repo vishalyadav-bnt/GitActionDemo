@@ -113,15 +113,13 @@ jobs:
           path: trivy-report.html
           retention-days: 30
 
-      - name: Notify on vulnerabilities
-        if: failure()
-        run: echo "Vulnerabilities detected! Check the Trivy scan report for details."
-
-      - name: Zip and upload SARIF to GitHub Packages
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GH_TOKEN: ${{ secrets.GHCR_PAT }}
+
+      - name: Create Release with SARIF Report
         run: |
-          zip trivy-results.zip trivy-results.sarif
-          gh release create "trivy-report-${{ github.sha }}" trivy-results.zip \
-            --repo "${{ github.repository }}" \
-            --notes "Trivy SARIF Report"
+           zip trivy-results.zip trivy-results.sarif
+           gh release create "trivy-report-${{ github.sha }}" trivy-results.zip \
+             --repo "${{ github.repository }}" \
+             --notes "Trivy SARIF Report"
+
