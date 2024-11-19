@@ -87,12 +87,12 @@ jobs:
             ghcr.io/${{ github.repository_owner }}/gitactiondemo:latest
 
      
-      # - name: Upload SARIF report
-      #   uses: github/codeql-action/upload-sarif@v3
-      #   if: always()
-      #   with:
-      #     sarif_file: trivy-results.sarif
-      #     category: Trivy Scan
+      - name: Upload SARIF report
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: trivy-results.sarif
+          category: Trivy Scan
 
       - name: Upload Trivy SARIF report as artifact
         uses: actions/upload-artifact@v3
@@ -110,3 +110,12 @@ jobs:
           name: trivy-scan-results
           path: trivy-report.html
           retention-days: 30
+
+       - name: Notify on vulnerabilities
+        if: failure()
+        run: echo "Vulnerabilities detected! Check the Trivy scan report for details."
+
+      - name: Zip and upload SARIF to GitHub Packages
+        run: |
+          zip trivy-results.zip trivy-results.sarif
+          gh release create "trivy-report-${{ github.sha }}" trivy-results.zip --notes "Trivy SARIF Report"
