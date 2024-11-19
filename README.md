@@ -24,6 +24,18 @@ This repository contains a **GitHub Actions workflow** designed for **automating
 Before running the workflow, ensure the following are set up:
 
 1. **GitHub Personal Access Token (PAT):**
+   - Go to your GitHub account and click on your profile picture at the top right corner
+   - Select Settings from the dropdown menu.
+   - In the left sidebar, click on Developer settings.
+   - Click on Personal access tokens.
+   - Click Generate new token.
+   - Provide a descriptive name for the token (e.g., "GitHub Actions CI/CD").
+   - Select the necessary scopes. For this pipeline, the following permissions are required:
+   - write:packages
+   - read:packages
+   - delete:packages
+   - After selecting the appropriate scopes, click Generate token.
+   - Copy the token as you won't be able to see it again.
    - Generate a **PAT** with the following permissions:
      - `write:packages`
      - `read:packages`
