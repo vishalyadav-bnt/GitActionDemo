@@ -111,7 +111,7 @@ jobs:
           path: trivy-report.html
           retention-days: 30
 
-       - name: Notify on vulnerabilities
+      - name: Notify on vulnerabilities
         if: failure()
         run: echo "Vulnerabilities detected! Check the Trivy scan report for details."
 
