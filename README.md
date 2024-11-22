@@ -25,6 +25,7 @@ Before running the workflow, ensure the following are set up:
 
 1. **GitHub Personal Access Token (PAT):**
    - Go to your GitHub account and click on your profile picture at the top right corner
+   - image 
    - Select Settings from the dropdown menu.
    - In the left sidebar, click on Developer settings.
    - Click on Personal access tokens.
@@ -58,3 +59,48 @@ Clone this repository to your local machine:
 git clone https://github.com/vishalyadav-bnt/GitActionDemo
 
 cd GitActionDemo
+```
+---
+# Workflow Explanation
+
+## 1. Code Checkout
+The workflow starts by checking out the code from the GitHub repository using `actions/checkout`.
+
+## 2. Java Setup
+It sets up JDK 21 using `actions/setup-java`, which is needed for building the Spring Boot application.
+
+## 3. Build the JAR File
+The `gradlew` script is made executable and then used to build the Spring Boot application JAR file.
+
+## 4. Build and Push Docker Image
+Docker is set up with `docker/setup-buildx-action`, and a Docker image is built and pushed to the GitHub Container Registry (`ghcr.io`).
+
+## 5. Scan Docker Image with Trivy
+Aqua Trivy is installed, and the Docker image is scanned for vulnerabilities. The results are output in SARIF format.
+
+## 6. Reports
+The SARIF report is uploaded to GitHub for integration with GitHub Security features. The SARIF report is also uploaded as an artifact, retained for 30 days.
+
+## Customizations
+
+### Severity Levels
+You can change the severity levels of vulnerabilities to scan by modifying the `--severity` flag. For example:
+
+```bash
+trivy image --format sarif --output trivy-results.sarif --severity HIGH,CRITICAL
+```
+Docker Tags: Modify the Docker tags or repository details based on your container registry settings in the Build and push Docker image step:
+
+yaml
+```
+tags: ghcr.io/${{ github.repository_owner }}/gitactiondemo:latest
+```
+Change gitactiondemo to your desired repository name.
+
+## Resources
+
+- [GitHub Actions Documentation](https://docs.github.com/en/actions)
+- [Aqua Trivy Documentation](https://github.com/aquasecurity/trivy)
+
+
+
